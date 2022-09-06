@@ -1,17 +1,26 @@
+import os
+
 from celery.schedules import crontab
 
 from core.celery_app import celery_app
+from editors.water_mark import ImageWaterMark
+from filter_build import Builder
 
 
-@celery_app.task(name="parser")
+@celery_app.task(name="handler")
 def check_magic_dir():
-    ...
-    # loop.run_until_complete(parser.get_channels())
+    magic_dir = "magic_dir"
+    ready_dir = "processed_image"
+
+    if os.listdir(magic_dir):
+        for image in os.listdir(magic_dir):
+            Builder().edit_photo(ImageWaterMark((0, 0), "media/watermark.png"))
+            os.replace(f"{dir}/{image}", f"{ready_dir}/{image}")
 
 
 celery_app.conf.beat_schedule = {
-    "run_parser_worker": {
-        "task": "parser",
+    "check_magic_dir": {
+        "task": "handler",
         "schedule": crontab(),
     },
 }
