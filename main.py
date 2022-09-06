@@ -1,14 +1,12 @@
 from PIL import ImageFont
 
-from editors.water_mark import TextWaterMark
+from editors.water_mark import ImageWaterMark
 
 
 def check():
-    TextWaterMark(
+    ImageWaterMark(
         (0, 0),
-        "aboba",
-        "black",
-        ImageFont.truetype("arial.ttf", 100)
+        "media/watermark.png"
     ).render("magic_dir/file.jpeg")
 
 
