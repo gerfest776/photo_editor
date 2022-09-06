@@ -1,10 +1,8 @@
 from abc import ABC
 
-from editors.base_editor import BaseEditor
+from PIL import Image, ImageColor, ImageDraw, ImageFont
 
-from PIL import Image, ImageColor
-from PIL import ImageDraw
-from PIL import ImageFont
+from editors.base_editor import BaseEditor
 
 
 class BaseWaterMark(BaseEditor, ABC):
@@ -19,9 +17,7 @@ class ImageWaterMark(BaseWaterMark):
 
     def render(self, image: str) -> None:
         base_image = Image.open(image)
-        base_image.paste(
-            Image.open(self.water_mark_path), self.pos
-        )
+        base_image.paste(Image.open(self.water_mark_path), self.pos)
         base_image.show()
         base_image.save(image)
 
@@ -36,14 +32,6 @@ class TextWaterMark(BaseWaterMark):
     def render(self, image: str) -> None:
         photo = Image.open(image)
 
-        ImageDraw.Draw(photo).text(
-            self.pos,
-            self.text,
-            fill=self.color,
-            font=self.font
-        )
+        ImageDraw.Draw(photo).text(self.pos, self.text, fill=self.color, font=self.font)
         photo.show()
         photo.save(image)
-
-
-

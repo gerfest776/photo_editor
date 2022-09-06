@@ -1,5 +1,6 @@
-from editors.base_editor import BaseEditor
 from PIL import Image
+
+from editors.base_editor import BaseEditor
 
 
 class SimpleResizer(BaseEditor):
