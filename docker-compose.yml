@@ -1,0 +1,43 @@
+version: "3.8"
+
+x-settings:
+  &global
+  environment:
+    - CELERY_BROKER=${CELERY_BROKER}
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:latest
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-edit}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-edit}
+    restart: always
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: celery.Dockerfile
+    container_name: worker
+    <<: *global
+    depends_on:
+      - rabbitmq
+      - db
+    restart: always
+    command: [ "worker" ]
+    volumes:
+      - .:/usr/src/app
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: celery.Dockerfile
+    container_name: beat
+    <<: *global
+    depends_on:
+      - rabbitmq
+      - celery_worker
+      - db
+    command: [ "beat" ]
+    volumes:
+      - .:/usr/src/app
