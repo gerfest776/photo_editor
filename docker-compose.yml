@@ -13,9 +13,6 @@ services:
     image: rabbitmq:latest
     ports:
       - "5672:5672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
     restart: always
 
   celery_worker:
