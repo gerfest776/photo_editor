@@ -14,7 +14,7 @@ def check_magic_dir():
 
     if os.listdir(magic_dir):
         for image in os.listdir(magic_dir):
-            Builder().edit_photo(ImageWaterMark((0, 0), "media/watermark.png"))
+            Builder(image).edit_photo(ImageWaterMark((0, 0), "media/watermark.png"))
             os.replace(f"{dir}/{image}", f"{ready_dir}/{image}")
 
 
