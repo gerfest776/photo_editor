@@ -12,4 +12,4 @@ class BaseBuilder(ABC):
 class Builder(BaseBuilder):
     def edit_photo(self, *args):
         for editor in args:
-            eval(f"{editor}.render({self.image})")
+            eval("editor.render(self.image)")

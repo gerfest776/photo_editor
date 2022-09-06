@@ -14,8 +14,12 @@ def check_magic_dir():
 
     if os.listdir(magic_dir):
         for image in os.listdir(magic_dir):
-            Builder(image).edit_photo(ImageWaterMark((0, 0), "media/watermark.png"))
-            os.replace(f"{dir}/{image}", f"{ready_dir}/{image}")
+            if image.startswith("."):
+                continue
+            Builder(f"{magic_dir}/{image}").edit_photo(
+                ImageWaterMark((0, 0), "media/watermark.png")
+            )
+            os.replace(f"{magic_dir}/{image}", f"{ready_dir}/{image}")
 
 
 celery_app.conf.beat_schedule = {

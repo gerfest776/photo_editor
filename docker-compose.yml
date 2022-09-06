@@ -4,14 +4,18 @@ x-settings:
   &global
   environment:
     - CELERY_BROKER=${CELERY_BROKER}
+    - RABBITMQ_USER=${RABBITMQ_USER}
+    - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
 
 services:
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:latest
+    ports:
+      - "5672:5672"
     environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-edit}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-edit}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
     restart: always
 
   celery_worker:
@@ -22,7 +26,6 @@ services:
     <<: *global
     depends_on:
       - rabbitmq
-      - db
     restart: always
     command: [ "worker" ]
     volumes:
@@ -37,7 +40,6 @@ services:
     depends_on:
       - rabbitmq
       - celery_worker
-      - db
     command: [ "beat" ]
     volumes:
       - .:/usr/src/app
